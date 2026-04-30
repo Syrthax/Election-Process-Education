@@ -1,18 +1,31 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 import NeutralityBanner from './NeutralityBanner';
 import QueryGuard from './QueryGuard';
+import PageTransition from './PageTransition';
+import ScrollToTop from './ScrollEffects';
+import BackToTop from './BackToTop';
 
 export default function Layout() {
+  const location = useLocation();
+
   return (
     <>
+      <ScrollToTop />
       <Navbar />
       <NeutralityBanner />
-      <main style={{ flex: 1, padding: '0 1.5rem 3rem', maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
-        <Outlet />
+      <main
+        id="main-content"
+        role="main"
+        style={{ flex: 1, padding: '0 1.5rem 3rem', maxWidth: '1200px', margin: '0 auto', width: '100%' }}
+      >
+        <PageTransition key={location.pathname}>
+          <Outlet />
+        </PageTransition>
       </main>
       <QueryGuard />
-      <footer style={{
+      <BackToTop />
+      <footer role="contentinfo" style={{
         padding: '2rem 1.5rem',
         textAlign: 'center',
         borderTop: '1px solid var(--glass-border)',

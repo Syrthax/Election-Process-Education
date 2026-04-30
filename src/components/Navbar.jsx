@@ -15,7 +15,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <nav style={{
+    <nav aria-label="Main navigation" role="navigation" style={{
       position: 'sticky',
       top: 0,
       zIndex: 100,
@@ -34,7 +34,7 @@ export default function Navbar() {
         height: '64px',
       }}>
         {/* Logo */}
-        <NavLink to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', color: 'inherit' }}>
+        <NavLink to="/" aria-label="VoteWise Home" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', color: 'inherit' }}>
           <div style={{
             width: 36, height: 36, borderRadius: 10,
             background: 'var(--gradient-primary)',
@@ -83,6 +83,8 @@ export default function Navbar() {
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
           className="mobile-toggle"
+          aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-expanded={mobileOpen}
           style={{
             display: 'none',
             background: 'none',

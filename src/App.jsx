@@ -6,10 +6,14 @@ import CandidateExplorer from './pages/CandidateExplorer';
 import Timeline from './pages/Timeline';
 import PollingBooth from './pages/PollingBooth';
 import ScenarioAssistant from './pages/ScenarioAssistant';
+import OnboardingModal from './components/OnboardingModal';
+import KeyboardShortcuts from './components/KeyboardShortcuts';
 
 function App() {
   return (
     <BrowserRouter>
+      <OnboardingModal />
+      <KeyboardShortcuts />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />

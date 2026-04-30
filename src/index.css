@@ -315,9 +315,132 @@ body {
   font-size: 1.05rem;
 }
 
+/* ===== Skeleton Loading ===== */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-line {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-lighter) 25%,
+    rgba(148, 163, 184, 0.12) 50%,
+    var(--color-surface-lighter) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+.skeleton-card {
+  pointer-events: none;
+}
+
+/* ===== Focus Styles (Accessibility) ===== */
+*:focus-visible {
+  outline: 2px solid var(--color-primary-light);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-primary-light);
+  outline-offset: 2px;
+}
+
+/* ===== Input Styles ===== */
+input, select, textarea {
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
+select option {
+  background: var(--color-surface);
+  color: var(--color-text);
+}
+
+/* ===== Disabled State ===== */
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
   .page-header h1 {
     font-size: 1.5rem;
+  }
+
+  .page-header p {
+    font-size: 0.9rem;
+  }
+
+  .glass-card {
+    border-radius: var(--radius);
+  }
+
+  .glass-card:hover {
+    transform: none;
+  }
+
+  .neutrality-banner {
+    font-size: 0.78rem;
+    padding: 10px 14px;
+    gap: 8px;
+  }
+
+  .btn-primary, .btn-secondary {
+    padding: 10px 20px;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .btn-primary, .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ===== Print Styles ===== */
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+  .glass-card {
+    background: white;
+    border: 1px solid #ddd;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+  .neutrality-banner,
+  nav,
+  footer {
+    display: none;
+  }
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

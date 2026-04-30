@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { ListChecks, Users, Calendar, MapPin, HelpCircle, ArrowRight, Vote, Shield, BarChart3 } from 'lucide-react';
+import { ListChecks, Users, Calendar, MapPin, HelpCircle, ArrowRight, Vote, Shield, BarChart3, Sparkles, CheckCircle } from 'lucide-react';
+import { AnimatedCounter } from '../components/ScrollEffects';
 
 const features = [
   {
@@ -47,36 +48,67 @@ const features = [
 const stats = [
   { label: 'States Covered', value: '6', icon: MapPin },
   { label: 'Constituencies', value: '6', icon: BarChart3 },
-  { label: 'Common Scenarios', value: '6', icon: HelpCircle },
+  { label: 'Candidates', value: '19', icon: Users },
+  { label: 'Scenarios', value: '6', icon: HelpCircle },
+];
+
+const principles = [
+  { icon: Shield, text: 'Factual Data Only', description: 'All data from Election Commission' },
+  { icon: CheckCircle, text: 'No Recommendations', description: 'We never suggest candidates' },
+  { icon: Sparkles, text: 'Open & Transparent', description: 'Sources cited everywhere' },
 ];
 
 export default function Dashboard() {
   return (
-    <div className="animate-fade-in-up">
+    <div>
       {/* Hero */}
       <section style={{
         textAlign: 'center',
         padding: '3rem 0 2rem',
+        position: 'relative',
       }}>
+        {/* Background glow effect */}
         <div style={{
-          width: 72,
-          height: 72,
-          borderRadius: 20,
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: 600,
+          height: 600,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+
+        <div style={{
+          width: 80,
+          height: 80,
+          borderRadius: 22,
           background: 'var(--gradient-primary)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           margin: '0 auto 1.5rem',
           boxShadow: '0 8px 32px rgba(99, 102, 241, 0.3)',
+          position: 'relative',
         }}>
-          <Vote size={36} color="white" />
+          <Vote size={40} color="white" />
+          {/* Animated ring */}
+          <div style={{
+            position: 'absolute',
+            inset: -4,
+            borderRadius: 26,
+            border: '2px solid rgba(99, 102, 241, 0.3)',
+            animation: 'pulse-glow 3s ease-in-out infinite',
+          }} />
         </div>
         <h1 style={{
-          fontSize: 'clamp(2rem, 5vw, 3rem)',
+          fontSize: 'clamp(2rem, 5vw, 3.25rem)',
           fontWeight: 900,
           letterSpacing: '-0.03em',
           lineHeight: 1.1,
           marginBottom: '1rem',
+          position: 'relative',
         }}>
           <span className="gradient-text">Your Guide to</span>
           <br />
@@ -88,12 +120,13 @@ export default function Dashboard() {
           maxWidth: '600px',
           margin: '0 auto 2rem',
           lineHeight: 1.7,
+          position: 'relative',
         }}>
           A structured, neutral civic guidance system that helps you navigate 
           the election process — from registration to casting your vote.
         </p>
 
-        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', position: 'relative' }}>
           <Link to="/guided-flow" className="btn-primary" style={{ fontSize: '1rem', padding: '14px 32px' }}>
             <ListChecks size={20} />
             Start Voting Guide
@@ -107,27 +140,27 @@ export default function Dashboard() {
 
       {/* Stats */}
       <section style={{
-        display: 'flex',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
         gap: '1rem',
-        justifyContent: 'center',
-        flexWrap: 'wrap',
         margin: '1rem 0 3rem',
       }}>
         {stats.map(stat => (
           <div key={stat.label} className="glass-card" style={{
-            padding: '1.25rem 2rem',
+            padding: '1.25rem 1.5rem',
             textAlign: 'center',
-            minWidth: '160px',
           }}>
             <stat.icon size={20} style={{ color: 'var(--color-primary-light)', marginBottom: 8 }} />
-            <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--color-text)' }}>{stat.value}</div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>{stat.label}</div>
+            <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--color-text)' }}>
+              <AnimatedCounter target={stat.value} duration={1200} />
+            </div>
+            <div style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', fontWeight: 500 }}>{stat.label}</div>
           </div>
         ))}
       </section>
 
       {/* Features Grid */}
-      <section>
+      <section style={{ marginBottom: '3rem' }}>
         <h2 style={{
           fontSize: '1.5rem',
           fontWeight: 800,
@@ -139,7 +172,7 @@ export default function Dashboard() {
         </h2>
         <div className="stagger-children" style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: '1rem',
         }}>
           {features.map(feature => (
@@ -156,25 +189,26 @@ export default function Dashboard() {
               }}
             >
               <div style={{
-                width: 44,
-                height: 44,
-                borderRadius: 12,
+                width: 48,
+                height: 48,
+                borderRadius: 14,
                 background: feature.gradient,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: '1rem',
+                boxShadow: `0 4px 12px ${feature.color}33`,
               }}>
-                <feature.icon size={22} color="white" />
+                <feature.icon size={24} color="white" />
               </div>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.5rem' }}>
+              <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '0.5rem' }}>
                 {feature.title}
               </h3>
-              <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', flex: 1 }}>
+              <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', flex: 1, lineHeight: 1.5 }}>
                 {feature.description}
               </p>
               <div style={{
-                marginTop: '1rem',
+                marginTop: '1.25rem',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 6,
@@ -189,30 +223,62 @@ export default function Dashboard() {
         </div>
       </section>
 
-      {/* Trust Section */}
+      {/* Principles Section */}
       <section className="glass-card" style={{
-        margin: '3rem 0 0',
-        padding: '2rem',
+        padding: '2.5rem 2rem',
         textAlign: 'center',
+        position: 'relative',
+        overflow: 'hidden',
       }}>
-        <Shield size={32} style={{ color: 'var(--color-info)', marginBottom: '1rem' }} />
-        <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.75rem' }}>
+        {/* Background accent */}
+        <div style={{
+          position: 'absolute',
+          top: -100,
+          right: -100,
+          width: 300,
+          height: 300,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(99, 102, 241, 0.06) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+
+        <div style={{
+          width: 56,
+          height: 56,
+          borderRadius: 16,
+          background: 'rgba(59, 130, 246, 0.1)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          margin: '0 auto 1.25rem',
+        }}>
+          <Shield size={28} style={{ color: 'var(--color-info)' }} />
+        </div>
+        <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
           Built on Neutrality & Trust
         </h3>
-        <p style={{ color: 'var(--color-text-muted)', maxWidth: '600px', margin: '0 auto', fontSize: '0.95rem' }}>
-          Every piece of information in this system is sourced from the Election Commission of India 
-          and official government data. We never recommend, rank, or express opinions about candidates 
-          or political parties.
+        <p style={{ color: 'var(--color-text-muted)', maxWidth: '550px', margin: '0 auto 2rem', fontSize: '0.95rem', lineHeight: 1.6 }}>
+          Every piece of information is sourced from the Election Commission of India 
+          and official government data.
         </p>
+
         <div style={{
-          display: 'flex',
-          gap: '2rem',
-          justifyContent: 'center',
-          marginTop: '1.5rem',
-          flexWrap: 'wrap',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '1.5rem',
+          position: 'relative',
         }}>
-          {['Factual Data Only', 'No Recommendations', 'ECI Sourced', 'Open & Transparent'].map(tag => (
-            <span key={tag} className="badge badge-primary" style={{ fontSize: '0.8rem' }}>{tag}</span>
+          {principles.map(p => (
+            <div key={p.text} style={{
+              padding: '1.25rem',
+              borderRadius: 'var(--radius)',
+              background: 'rgba(99, 102, 241, 0.04)',
+              border: '1px solid rgba(99, 102, 241, 0.08)',
+            }}>
+              <p.icon size={24} style={{ color: 'var(--color-primary-light)', marginBottom: 10 }} />
+              <div style={{ fontWeight: 700, fontSize: '0.95rem', marginBottom: 4 }}>{p.text}</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{p.description}</div>
+            </div>
           ))}
         </div>
       </section>

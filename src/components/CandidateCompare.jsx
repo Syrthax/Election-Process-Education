@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
 import { useApp } from '../context/AppContext';
+import ComparisonChart from './ComparisonChart';
 
 export default function CandidateCompare({ candidates }) {
   const { state, dispatch } = useApp();
@@ -108,6 +109,9 @@ export default function CandidateCompare({ candidates }) {
           </tbody>
         </table>
       </div>
+
+      {/* Visual Charts */}
+      <ComparisonChart candidates={compareItems} />
 
       <div style={{
         marginTop: '1rem',

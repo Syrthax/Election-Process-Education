@@ -1,0 +1,19 @@
+{
+  "name": "VoteWise — Election Guide",
+  "short_name": "VoteWise",
+  "description": "A neutral civic guidance system for Indian elections. Get step-by-step voting guidance, explore candidates, and find your polling booth.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "government"]
+}
