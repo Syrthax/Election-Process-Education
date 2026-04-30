@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import NeutralityBanner from './NeutralityBanner';
+import QueryGuard from './QueryGuard';
 
 export default function Layout() {
   return (
@@ -10,6 +11,7 @@ export default function Layout() {
       <main style={{ flex: 1, padding: '0 1.5rem 3rem', maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
         <Outlet />
       </main>
+      <QueryGuard />
       <footer style={{
         padding: '2rem 1.5rem',
         textAlign: 'center',
