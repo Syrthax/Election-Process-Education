@@ -1,0 +1,289 @@
+{
+  "lastUpdated": "2024-06-01",
+  "source": "Election Commission of India — Affidavit Data (Sample Dataset)",
+  "constituencies": [
+    {
+      "state": "Maharashtra",
+      "name": "Mumbai North",
+      "candidates": [
+        {
+          "id": "mn-001",
+          "name": "Rajesh Kumar Sharma",
+          "party": "Bharatiya Janata Party",
+          "partyAbbr": "BJP",
+          "age": 58,
+          "gender": "Male",
+          "education": "Post Graduate",
+          "criminalCases": 0,
+          "totalAssets": "₹12.5 Cr",
+          "totalLiabilities": "₹1.2 Cr",
+          "profession": "Business"
+        },
+        {
+          "id": "mn-002",
+          "name": "Priya Deshmukh",
+          "party": "Indian National Congress",
+          "partyAbbr": "INC",
+          "age": 45,
+          "gender": "Female",
+          "education": "Graduate Professional",
+          "criminalCases": 0,
+          "totalAssets": "₹8.3 Cr",
+          "totalLiabilities": "₹45 L",
+          "profession": "Advocate"
+        },
+        {
+          "id": "mn-003",
+          "name": "Amit Patil",
+          "party": "Aam Aadmi Party",
+          "partyAbbr": "AAP",
+          "age": 39,
+          "gender": "Male",
+          "education": "Graduate",
+          "criminalCases": 0,
+          "totalAssets": "₹2.1 Cr",
+          "totalLiabilities": "₹30 L",
+          "profession": "Social Worker"
+        },
+        {
+          "id": "mn-004",
+          "name": "Sunita Yadav",
+          "party": "Shiv Sena (UBT)",
+          "partyAbbr": "SHS(UBT)",
+          "age": 52,
+          "gender": "Female",
+          "education": "Post Graduate",
+          "criminalCases": 1,
+          "totalAssets": "₹6.7 Cr",
+          "totalLiabilities": "₹80 L",
+          "profession": "Politician"
+        }
+      ]
+    },
+    {
+      "state": "Maharashtra",
+      "name": "Mumbai South",
+      "candidates": [
+        {
+          "id": "ms-001",
+          "name": "Vikram Mehta",
+          "party": "Bharatiya Janata Party",
+          "partyAbbr": "BJP",
+          "age": 61,
+          "gender": "Male",
+          "education": "Doctorate",
+          "criminalCases": 0,
+          "totalAssets": "₹18.2 Cr",
+          "totalLiabilities": "₹2.5 Cr",
+          "profession": "Industrialist"
+        },
+        {
+          "id": "ms-002",
+          "name": "Ananya Iyer",
+          "party": "Indian National Congress",
+          "partyAbbr": "INC",
+          "age": 42,
+          "gender": "Female",
+          "education": "Graduate Professional",
+          "criminalCases": 0,
+          "totalAssets": "₹5.8 Cr",
+          "totalLiabilities": "₹60 L",
+          "profession": "Advocate"
+        },
+        {
+          "id": "ms-003",
+          "name": "Mohammad Farooq",
+          "party": "Nationalist Congress Party",
+          "partyAbbr": "NCP",
+          "age": 55,
+          "gender": "Male",
+          "education": "Post Graduate",
+          "criminalCases": 0,
+          "totalAssets": "₹9.4 Cr",
+          "totalLiabilities": "₹1.1 Cr",
+          "profession": "Business"
+        }
+      ]
+    },
+    {
+      "state": "Delhi",
+      "name": "New Delhi",
+      "candidates": [
+        {
+          "id": "nd-001",
+          "name": "Suresh Gupta",
+          "party": "Bharatiya Janata Party",
+          "partyAbbr": "BJP",
+          "age": 56,
+          "gender": "Male",
+          "education": "Post Graduate",
+          "criminalCases": 0,
+          "totalAssets": "₹15.3 Cr",
+          "totalLiabilities": "₹1.8 Cr",
+          "profession": "Politician"
+        },
+        {
+          "id": "nd-002",
+          "name": "Kavita Singh",
+          "party": "Indian National Congress",
+          "partyAbbr": "INC",
+          "age": 48,
+          "gender": "Female",
+          "education": "Graduate Professional",
+          "criminalCases": 0,
+          "totalAssets": "₹7.2 Cr",
+          "totalLiabilities": "₹55 L",
+          "profession": "Advocate"
+        },
+        {
+          "id": "nd-003",
+          "name": "Rahul Verma",
+          "party": "Aam Aadmi Party",
+          "partyAbbr": "AAP",
+          "age": 41,
+          "gender": "Male",
+          "education": "Graduate",
+          "criminalCases": 0,
+          "totalAssets": "₹3.5 Cr",
+          "totalLiabilities": "₹40 L",
+          "profession": "Educator"
+        }
+      ]
+    },
+    {
+      "state": "Delhi",
+      "name": "East Delhi",
+      "candidates": [
+        {
+          "id": "ed-001",
+          "name": "Arun Thakur",
+          "party": "Bharatiya Janata Party",
+          "partyAbbr": "BJP",
+          "age": 53,
+          "gender": "Male",
+          "education": "Graduate",
+          "criminalCases": 1,
+          "totalAssets": "₹10.8 Cr",
+          "totalLiabilities": "₹1.5 Cr",
+          "profession": "Business"
+        },
+        {
+          "id": "ed-002",
+          "name": "Meena Kumari",
+          "party": "Indian National Congress",
+          "partyAbbr": "INC",
+          "age": 46,
+          "gender": "Female",
+          "education": "Post Graduate",
+          "criminalCases": 0,
+          "totalAssets": "₹4.6 Cr",
+          "totalLiabilities": "₹35 L",
+          "profession": "Social Worker"
+        },
+        {
+          "id": "ed-003",
+          "name": "Deepak Choudhary",
+          "party": "Aam Aadmi Party",
+          "partyAbbr": "AAP",
+          "age": 37,
+          "gender": "Male",
+          "education": "Graduate Professional",
+          "criminalCases": 0,
+          "totalAssets": "₹2.8 Cr",
+          "totalLiabilities": "₹25 L",
+          "profession": "Engineer"
+        }
+      ]
+    },
+    {
+      "state": "Karnataka",
+      "name": "Bangalore South",
+      "candidates": [
+        {
+          "id": "bs-001",
+          "name": "Naveen Reddy",
+          "party": "Bharatiya Janata Party",
+          "partyAbbr": "BJP",
+          "age": 59,
+          "gender": "Male",
+          "education": "Post Graduate",
+          "criminalCases": 0,
+          "totalAssets": "₹22.1 Cr",
+          "totalLiabilities": "₹3.2 Cr",
+          "profession": "Industrialist"
+        },
+        {
+          "id": "bs-002",
+          "name": "Lakshmi Narasimha",
+          "party": "Indian National Congress",
+          "partyAbbr": "INC",
+          "age": 51,
+          "gender": "Male",
+          "education": "Doctorate",
+          "criminalCases": 0,
+          "totalAssets": "₹11.4 Cr",
+          "totalLiabilities": "₹1.6 Cr",
+          "profession": "Professor"
+        },
+        {
+          "id": "bs-003",
+          "name": "Fatima Begum",
+          "party": "Janata Dal (Secular)",
+          "partyAbbr": "JD(S)",
+          "age": 44,
+          "gender": "Female",
+          "education": "Graduate Professional",
+          "criminalCases": 0,
+          "totalAssets": "₹5.3 Cr",
+          "totalLiabilities": "₹50 L",
+          "profession": "Advocate"
+        }
+      ]
+    },
+    {
+      "state": "Tamil Nadu",
+      "name": "Chennai Central",
+      "candidates": [
+        {
+          "id": "cc-001",
+          "name": "Murugan Selvam",
+          "party": "Dravida Munnetra Kazhagam",
+          "partyAbbr": "DMK",
+          "age": 54,
+          "gender": "Male",
+          "education": "Post Graduate",
+          "criminalCases": 0,
+          "totalAssets": "₹14.7 Cr",
+          "totalLiabilities": "₹2.1 Cr",
+          "profession": "Politician"
+        },
+        {
+          "id": "cc-002",
+          "name": "Saranya Ramachandran",
+          "party": "All India Anna Dravida Munnetra Kazhagam",
+          "partyAbbr": "AIADMK",
+          "age": 47,
+          "gender": "Female",
+          "education": "Graduate Professional",
+          "criminalCases": 0,
+          "totalAssets": "₹8.9 Cr",
+          "totalLiabilities": "₹70 L",
+          "profession": "Advocate"
+        },
+        {
+          "id": "cc-003",
+          "name": "Karthik Subramanian",
+          "party": "Bharatiya Janata Party",
+          "partyAbbr": "BJP",
+          "age": 43,
+          "gender": "Male",
+          "education": "Graduate",
+          "criminalCases": 0,
+          "totalAssets": "₹6.2 Cr",
+          "totalLiabilities": "₹45 L",
+          "profession": "Business"
+        }
+      ]
+    }
+  ]
+}

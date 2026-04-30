@@ -1,0 +1,88 @@
+{
+  "scenarios": [
+    {
+      "id": "moved-city",
+      "title": "I moved to another city",
+      "icon": "MapPin",
+      "description": "What to do when you've relocated",
+      "steps": [
+        { "text": "Apply for transfer of registration using Form 6 at voters.eci.gov.in", "type": "action" },
+        { "text": "Select 'Shifting from one constituency to another' as the reason", "type": "action" },
+        { "text": "Provide new address proof (Aadhaar, utility bill, rent agreement)", "type": "action" },
+        { "text": "Your old registration will be deleted after new one is approved", "type": "info" },
+        { "text": "Processing takes 2-4 weeks — apply well before election deadlines", "type": "warning" }
+      ],
+      "source": "Election Commission of India — Form 6 Guidelines"
+    },
+    {
+      "id": "lost-voter-id",
+      "title": "I lost my Voter ID",
+      "icon": "CreditCard",
+      "description": "How to get a duplicate or use alternatives",
+      "steps": [
+        { "text": "Apply for a duplicate Voter ID using Form 001 at voters.eci.gov.in", "type": "action" },
+        { "text": "You can also download e-EPIC (digital voter ID) instantly", "type": "action" },
+        { "text": "On election day, you can use any of 12 approved photo IDs instead", "type": "info" },
+        { "text": "Approved alternatives: Aadhaar, Passport, Driving License, PAN Card, etc.", "type": "info" },
+        { "text": "File an FIR if your ID was stolen — carry the FIR copy as record", "type": "warning" }
+      ],
+      "source": "Election Commission of India"
+    },
+    {
+      "id": "eligibility-check",
+      "title": "Am I eligible to vote?",
+      "icon": "UserCheck",
+      "description": "Check if you meet all requirements",
+      "steps": [
+        { "text": "You must be an Indian citizen (not an NRI with cancelled citizenship)", "type": "info" },
+        { "text": "You must be 18 years or older on January 1st of the qualifying year", "type": "info" },
+        { "text": "You must be a resident of the constituency where you're registered", "type": "info" },
+        { "text": "You must not be disqualified due to unsoundness of mind or corrupt practices", "type": "info" },
+        { "text": "NRIs can vote under Section 20A of the R.P. Act — must be present in person", "type": "info" }
+      ],
+      "source": "Representation of the People Act, 1950"
+    },
+    {
+      "id": "nri-voting",
+      "title": "I'm an NRI — Can I vote?",
+      "icon": "Globe",
+      "description": "Overseas voter registration process",
+      "steps": [
+        { "text": "Yes! NRIs can register using Form 6A at voters.eci.gov.in", "type": "info" },
+        { "text": "You must have an Indian passport (valid or expired)", "type": "action" },
+        { "text": "Registration is for the constituency of your passport address", "type": "info" },
+        { "text": "Currently, you must be physically present to vote — no postal ballot yet for NRIs in general elections", "type": "warning" },
+        { "text": "Carry passport + visa as proof at the polling station", "type": "action" }
+      ],
+      "source": "Section 20A, Representation of the People Act"
+    },
+    {
+      "id": "name-not-in-list",
+      "title": "My name is not in the voter list",
+      "icon": "AlertTriangle",
+      "description": "Steps to resolve missing voter registration",
+      "steps": [
+        { "text": "Search your name at voters.eci.gov.in or Voter Helpline App", "type": "action" },
+        { "text": "Try searching with different name spellings or family member details", "type": "action" },
+        { "text": "If not found, apply fresh using Form 6 (new registration)", "type": "action" },
+        { "text": "Contact your Booth Level Officer (BLO) — they can help verify", "type": "action" },
+        { "text": "Call 1950 (Voter Helpline) for immediate assistance", "type": "info" }
+      ],
+      "source": "National Voters' Service Portal"
+    },
+    {
+      "id": "pwd-voting",
+      "title": "I have a disability — What facilities are available?",
+      "icon": "Accessibility",
+      "description": "Accessible voting provisions",
+      "steps": [
+        { "text": "Every polling station must have ramps and wheelchair access", "type": "info" },
+        { "text": "Braille-enabled EVMs are available for visually impaired voters", "type": "info" },
+        { "text": "You can bring a companion to assist you in the voting booth", "type": "info" },
+        { "text": "Priority queue for PwD voters, pregnant women, and senior citizens", "type": "info" },
+        { "text": "Postal ballot facility available for 40%+ disability — apply via Form 12D", "type": "action" }
+      ],
+      "source": "Election Commission of India — Accessible Elections Guidelines"
+    }
+  ]
+}

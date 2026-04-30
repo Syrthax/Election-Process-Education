@@ -1,0 +1,16 @@
+{
+  "states": {
+    "not_registered": { "label": "Not Registered", "description": "You need to register as a voter first", "currentStep": 0 },
+    "registered": { "label": "Registered Voter", "description": "You are registered. Let's prepare for election day.", "currentStep": 3 },
+    "ready_to_vote": { "label": "Ready to Vote", "description": "You're all set! Here's what to expect on election day.", "currentStep": 5 }
+  },
+  "steps": [
+    { "id": 1, "title": "Check Eligibility", "description": "Verify you meet the requirements to vote.", "details": ["Must be an Indian citizen", "Must be 18+ on qualifying date (Jan 1st of electoral roll revision year)", "Must be resident of the constituency", "Must not be disqualified under any law"], "action": "Visit eci.gov.in to check eligibility", "source": "Election Commission of India" },
+    { "id": 2, "title": "Gather Documents", "description": "Collect documents needed for registration.", "details": ["Proof of age: Birth certificate, Class 10 marksheet, or passport", "Proof of address: Aadhaar, utility bills, bank passbook, ration card", "Passport-size photographs", "Declaration for first-time voters (if applicable)"], "action": "Prepare documents before applying", "source": "Election Commission of India" },
+    { "id": 3, "title": "Register Online/Offline", "description": "Submit voter registration application.", "details": ["Online: voters.eci.gov.in — Fill Form 6", "Offline: Visit nearest Electoral Registration Office", "Via Voter Helpline App", "Through Common Service Centers", "Through Booth Level Officer (BLO)"], "action": "Apply at voters.eci.gov.in", "source": "National Voters' Service Portal" },
+    { "id": 4, "title": "Receive Voter ID (EPIC)", "description": "EPIC card issued after verification.", "details": ["BLO may visit for verification", "Processing: 2-4 weeks", "Card delivered to registered address", "Download e-EPIC from voters.eci.gov.in"], "action": "Track at voters.eci.gov.in", "source": "Election Commission of India" },
+    { "id": 5, "title": "Find Polling Booth", "description": "Locate polling station for your constituency.", "details": ["Search on voters.eci.gov.in with EPIC number", "Use Voter Helpline App", "Station assigned based on registered address"], "action": "Use our Polling Booth Finder", "source": "Election Commission of India" },
+    { "id": 6, "title": "Prepare for Election Day", "description": "Know what to carry and expect.", "details": ["Carry Voter ID or approved photo ID", "Approved: Aadhaar, Passport, DL, PAN, etc.", "Check serial number in voter list", "Polling hours: usually 7 AM - 6 PM", "No electronics inside booth"], "action": "Review approved ID list", "source": "Election Commission of India" },
+    { "id": 7, "title": "Cast Your Vote", "description": "The voting process at the station.", "details": ["Queue at assigned polling station", "Show voter ID to polling officer", "Finger marked with indelible ink", "Press button next to chosen candidate on EVM", "Verify on VVPAT slip (7 seconds)", "Collect voter slip and exit"], "action": "Your vote is private and protected by law", "source": "Election Commission of India" }
+  ]
+}

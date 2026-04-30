@@ -1,0 +1,25 @@
+{
+  "electionName": "General Elections 2024",
+  "events": [
+    { "id": "t1", "date": "2024-03-16", "title": "Election Announced", "description": "Model Code of Conduct comes into effect", "type": "milestone", "completed": true },
+    { "id": "t2", "date": "2024-03-20", "title": "Last Date — New Voter Registration", "description": "Register before this date to vote in the upcoming election", "type": "deadline", "completed": true },
+    { "id": "t3", "date": "2024-04-19", "title": "Phase 1 Voting", "description": "102 constituencies across 21 states/UTs", "type": "voting", "completed": true },
+    { "id": "t4", "date": "2024-04-26", "title": "Phase 2 Voting", "description": "89 constituencies across 13 states/UTs", "type": "voting", "completed": true },
+    { "id": "t5", "date": "2024-05-07", "title": "Phase 3 Voting", "description": "94 constituencies across 12 states/UTs", "type": "voting", "completed": true },
+    { "id": "t6", "date": "2024-05-13", "title": "Phase 4 Voting", "description": "96 constituencies across 10 states/UTs", "type": "voting", "completed": true },
+    { "id": "t7", "date": "2024-05-20", "title": "Phase 5 Voting", "description": "49 constituencies across 8 states/UTs", "type": "voting", "completed": true },
+    { "id": "t8", "date": "2024-05-25", "title": "Phase 6 Voting", "description": "57 constituencies across 7 states/UTs", "type": "voting", "completed": true },
+    { "id": "t9", "date": "2024-06-01", "title": "Phase 7 Voting", "description": "57 constituencies across 8 states/UTs", "type": "voting", "completed": true },
+    { "id": "t10", "date": "2024-06-04", "title": "Results Declared", "description": "Counting of votes and declaration of results", "type": "milestone", "completed": true }
+  ],
+  "checklist": [
+    { "id": "c1", "text": "Verify your name in the electoral roll", "link": "https://voters.eci.gov.in", "priority": "high" },
+    { "id": "c2", "text": "Check your EPIC/Voter ID is valid and not damaged", "priority": "high" },
+    { "id": "c3", "text": "Find your assigned polling station", "priority": "high" },
+    { "id": "c4", "text": "Note polling date for your constituency phase", "priority": "high" },
+    { "id": "c5", "text": "Carry approved photo ID on election day", "priority": "medium" },
+    { "id": "c6", "text": "Review candidates in your constituency", "priority": "medium" },
+    { "id": "c7", "text": "Plan your route to polling station", "priority": "medium" },
+    { "id": "c8", "text": "Know voting hours (typically 7 AM - 6 PM)", "priority": "low" }
+  ]
+}
