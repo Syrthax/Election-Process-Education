@@ -14,12 +14,33 @@ The app runs at `http://localhost:5173`.
 
 ## Environment variables
 
-All variables go in `.env.local` (gitignored). Vite only exposes variables prefixed with `VITE_` to the client.
+All variables go in `.env.local` (gitignored) for local dev. Vite only exposes variables prefixed with `VITE_` to the client bundle.
 
 | Variable | Purpose |
 |----------|---------|
 | `VITE_FEATHERLESS_API_KEY` | Enables the live AI assistant via [Featherless AI](https://featherless.ai). If unset, the assistant falls back to a local keyword responder. |
-| `VITE_FEATHERLESS_MODEL`   | Optional model override (default: `meta-llama/Meta-Llama-3.1-8B-Instruct`). |
+| `VITE_FEATHERLESS_MODEL`   | Optional model override (default: `google/gemma-2-9b-it`). |
+
+## Deployment (GitHub Pages)
+
+A GitHub Actions workflow at `.github/workflows/deploy.yml` builds and deploys the site to GitHub Pages on every push to `main`.
+
+**Setup (one-time):**
+1. **Repo → Settings → Secrets and variables → Actions → New repository secret**
+   Name: `FEATHERLESS_API`  ·  Value: your Featherless API key.
+2. **Repo → Settings → Pages → Build and deployment → Source: GitHub Actions.**
+3. Push to `main`. The workflow will build with the secret injected as `VITE_FEATHERLESS_API_KEY` and publish to `https://<user>.github.io/Election-Process-Education/`.
+
+The workflow also copies `index.html` → `404.html` so client-side routes survive a refresh.
+
+### ⚠️ Security caveat (read before publishing)
+
+Vite inlines `VITE_*` env vars into the **client bundle**. That means the Featherless key shipped via GitHub Pages is **visible to anyone who views the JS** — they can extract and reuse it. For a public site, you should either:
+
+- Put the API call behind a serverless proxy (Cloudflare Workers, Vercel function, etc.) that holds the key server-side, or
+- Use a Featherless key with a low spend cap and aggressive rate limits, treating leakage as expected.
+
+For local dev / private demos this is fine.
 
 ## Features
 

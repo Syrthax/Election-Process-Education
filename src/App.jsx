@@ -11,7 +11,7 @@ import KeyboardShortcuts from './components/KeyboardShortcuts';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <OnboardingModal />
       <KeyboardShortcuts />
       <Routes>

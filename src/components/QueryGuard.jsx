@@ -142,10 +142,10 @@ export default function QueryGuard() {
               color: 'var(--color-text-muted)',
               maxWidth: '90%',
             }}>
-              👋 Hi! I can answer factual questions about the Indian election process. I cannot recommend candidates or express political opinions.
+              👋 Hi! I'm VoteWise. Ask me anything about voting in India — what documents to carry, where to go, when polls open, how to register, EVM/VVPAT, accessibility, NRI voting, and more. I will not recommend candidates or parties.
               {isFeatherlessConfigured()
-                ? ' (Powered by Featherless AI)'
-                : ' (Running in offline keyword mode — set VITE_FEATHERLESS_API_KEY to enable the live AI assistant.)'}
+                ? ' (Powered by Featherless AI · Gemma)'
+                : ' (Offline keyword mode — set VITE_FEATHERLESS_API_KEY to enable the live AI assistant.)'}
             </div>
 
             {history.map(entry => (
