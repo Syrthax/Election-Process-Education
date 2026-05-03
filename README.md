@@ -204,26 +204,61 @@ The workflow at `.github/workflows/deploy.yml` runs **lint → tests → build �
    - `GA_MEASUREMENT_ID` (e.g. `G-XXXXXXXXXX`, optional)
    - `FEATHERLESS_MODEL` (optional override of the default)
 
-### ⚠️ Security caveat
+### Optional: Cloudflare Worker LLM proxy
 
-Vite inlines `VITE_*` env vars into the **client bundle**. Keys deployed via Pages are recoverable from the JS. For a long-running public site, route LLM/Maps calls through a serverless proxy (Cloudflare Worker, Vercel function) and keep keys server-side. See [`SECURITY.md`](SECURITY.md) for the full threat model.
+To avoid shipping the Featherless key in the client bundle, a Worker is included at [`workers/llm-proxy/`](workers/llm-proxy/). It holds the API key as a Wrangler secret, applies CORS allow-listing, payload validation, and (optionally) per-IP KV rate-limiting.
+
+```bash
+cd workers/llm-proxy
+npm install
+npx wrangler login
+npx wrangler secret put FEATHERLESS_API_KEY
+npx wrangler deploy
+```
+
+Then set `VITE_LLM_PROXY_URL` (in `.env.local` or as a GitHub Variable) to the deployed Worker URL. The client (`src/utils/featherless.js`) auto-detects the proxy and stops using the direct API key path.
+
+### ⚠️ Security caveat (when not using the Worker proxy)
+
+Vite inlines `VITE_*` env vars into the **client bundle**. Keys deployed via Pages are recoverable from the JS. The Worker proxy above is the proper fix; treat the direct path as for local dev / private demos. See [`SECURITY.md`](SECURITY.md) for the full threat model.
 
 ## Tests
 
+### Unit + component (Vitest, 68 tests)
+
 ```
-src/utils/__tests__/neutrality.test.js   — guard + sanitiser (24 cases)
-src/utils/__tests__/sanitize.test.js     — input sanitisation
-src/utils/__tests__/featherless.test.js  — LLM client (mocked fetch + error paths)
-src/utils/__tests__/analytics.test.js    — GA wrapper
-src/context/__tests__/appReducer.test.js — every action + immutability
-src/i18n/__tests__/I18nContext.test.jsx  — translation lookup, fallback, persistence
+src/__tests__/a11y.test.jsx                — axe-core a11y on Dashboard, PollingBooth, QueryGuard, CandidateCard
+src/utils/__tests__/neutrality.test.js     — guard + sanitiser (24 cases)
+src/utils/__tests__/sanitize.test.js       — input sanitisation
+src/utils/__tests__/featherless.test.js    — LLM client + proxy/direct transport selection
+src/utils/__tests__/googleMaps.test.js     — Google Geocoding + Places (mocked)
+src/utils/__tests__/analytics.test.js      — GA wrapper
+src/context/__tests__/appReducer.test.js   — every action + immutability
+src/i18n/__tests__/I18nContext.test.jsx    — translation lookup, fallback, persistence
 src/components/__tests__/QueryGuard.test.jsx — chat UI + neutrality guard end-to-end
 ```
 
 ```
 $ npm run test:run
- Test Files  7 passed (7)
- Tests       57 passed (57)
+ Test Files  9 passed (9)
+ Tests      68 passed (68)
+```
+
+### End-to-end (Playwright, 11 specs)
+
+```
+e2e/smoke.spec.js
+  ├── renders /, /guided-flow, /candidates, /timeline, /polling-booth, /scenarios
+  ├── skip-to-content link is the first focusable element
+  ├── main navigation works end-to-end
+  ├── Ask VoteWise opens and refuses advisory queries
+  ├── booth search shows the OSM fallback iframe
+  └── language toggle persists across reload
+```
+
+```bash
+npm run test:e2e:install   # one-time: install chromium
+npm run test:e2e
 ```
 
 ## Project layout

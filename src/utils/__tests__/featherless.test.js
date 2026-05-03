@@ -37,14 +37,30 @@ describe('askFeatherless', () => {
     vi.restoreAllMocks();
   });
 
-  it('throws when API key not configured', async () => {
+  it('throws when no transport is configured', async () => {
     vi.stubEnv('VITE_FEATHERLESS_API_KEY', '');
+    vi.stubEnv('VITE_LLM_PROXY_URL', '');
     const { askFeatherless } = await loadModule();
-    await expect(askFeatherless('hello')).rejects.toThrow(/not configured/);
+    await expect(askFeatherless('hello')).rejects.toThrow(/transport not configured/);
+  });
+
+  it('uses the proxy URL when set, with no Authorization header', async () => {
+    vi.stubEnv('VITE_FEATHERLESS_API_KEY', '');
+    vi.stubEnv('VITE_LLM_PROXY_URL', 'https://proxy.example.com');
+    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
+      ok: true,
+      json: async () => ({ choices: [{ message: { content: 'OK from proxy.' } }] }),
+    });
+    const { askFeatherless } = await loadModule();
+    await askFeatherless('hi');
+    const [url, init] = fetchSpy.mock.calls[0];
+    expect(url).toBe('https://proxy.example.com');
+    expect(init.headers.Authorization).toBeUndefined();
   });
 
   it('calls Featherless endpoint with correct payload', async () => {
     vi.stubEnv('VITE_FEATHERLESS_API_KEY', 'test-key');
+    vi.stubEnv('VITE_LLM_PROXY_URL', '');
     const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValue({
       ok: true,
       json: async () => ({ choices: [{ message: { content: 'Polls open at 7 AM.' } }] }),
@@ -68,6 +84,7 @@ describe('askFeatherless', () => {
 
   it('throws on non-OK response', async () => {
     vi.stubEnv('VITE_FEATHERLESS_API_KEY', 'test-key');
+    vi.stubEnv('VITE_LLM_PROXY_URL', '');
     vi.spyOn(globalThis, 'fetch').mockResolvedValue({
       ok: false,
       status: 503,
@@ -80,6 +97,7 @@ describe('askFeatherless', () => {
 
   it('throws on empty content', async () => {
     vi.stubEnv('VITE_FEATHERLESS_API_KEY', 'test-key');
+    vi.stubEnv('VITE_LLM_PROXY_URL', '');
     vi.spyOn(globalThis, 'fetch').mockResolvedValue({
       ok: true,
       json: async () => ({ choices: [] }),

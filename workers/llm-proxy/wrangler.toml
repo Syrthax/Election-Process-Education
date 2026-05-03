@@ -1,0 +1,14 @@
+name = "votewise-llm-proxy"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+# CORS — set this to your Pages origin once deployed.
+# Multiple origins can be comma-separated.
+[vars]
+ALLOWED_ORIGINS = "http://localhost:5173,https://syrthax.github.io"
+RATE_LIMIT_PER_MIN = "20"
+DEFAULT_MODEL = "google/gemma-2-9b-it"
+
+# Bindings (configured via `wrangler secret put` and the dashboard):
+#   FEATHERLESS_API_KEY  — secret, set via: wrangler secret put FEATHERLESS_API_KEY
+#   RATE_LIMIT           — KV namespace, optional (sliding-window IP rate limit)

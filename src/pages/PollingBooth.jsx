@@ -1,7 +1,8 @@
 import { useState, useCallback } from 'react';
-import { MapPin, Navigation, Search, ExternalLink, AlertCircle } from 'lucide-react';
+import { MapPin, Navigation, Search, ExternalLink, AlertCircle, School } from 'lucide-react';
 import { trackEvent } from '../utils/analytics';
 import { sanitizeUserInput } from '../utils/sanitize';
+import { geocodeAddress, findNearbyPollingPlaces, isGoogleMapsConfigured } from '../utils/googleMaps';
 
 const DEFAULT_CENTER = { lat: 20.5937, lng: 78.9629 }; // India
 const GMAPS_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -28,6 +29,20 @@ export default function PollingBooth() {
   const [coords, setCoords] = useState(null);
   const [resolvedLabel, setResolvedLabel] = useState('');
   const [error, setError] = useState('');
+  const [nearbyPlaces, setNearbyPlaces] = useState([]);
+
+  const loadNearbyPlaces = useCallback(async (lat, lng) => {
+    if (!isGoogleMapsConfigured()) {
+      setNearbyPlaces([]);
+      return;
+    }
+    try {
+      const places = await findNearbyPollingPlaces({ lat, lng });
+      setNearbyPlaces(places);
+    } catch {
+      setNearbyPlaces([]);
+    }
+  }, []);
 
   const handleGeolocate = useCallback(() => {
     if (!navigator.geolocation) {
@@ -45,6 +60,7 @@ export default function PollingBooth() {
         setResolvedLabel('Your current location');
         setSearched(true);
         setLoading(false);
+        loadNearbyPlaces(latitude, longitude);
       },
       () => {
         setError('Unable to get your location. Please enter your address manually.');
@@ -52,7 +68,7 @@ export default function PollingBooth() {
       },
       { timeout: 10000, maximumAge: 60000 }
     );
-  }, []);
+  }, [loadNearbyPlaces]);
 
   const handleSearch = useCallback(async (e) => {
     e.preventDefault();
@@ -63,17 +79,31 @@ export default function PollingBooth() {
     setSearched(true);
     trackEvent('polling_booth_search', { query_length: q.length });
     try {
-      const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=in&q=${encodeURIComponent(q)}`;
-      const res = await fetch(url, { headers: { Accept: 'application/json' } });
-      if (!res.ok) throw new Error('Geocoding failed');
-      const data = await res.json();
-      if (Array.isArray(data) && data.length > 0) {
-        const { lat, lon, display_name } = data[0];
-        setCoords({ lat: parseFloat(lat), lng: parseFloat(lon) });
-        setResolvedLabel(display_name);
+      // Prefer Google Geocoding (better accuracy in India), fall back to Nominatim.
+      let result = null;
+      if (isGoogleMapsConfigured()) {
+        result = await geocodeAddress(q);
+      }
+      if (!result) {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=in&q=${encodeURIComponent(q)}`;
+        const res = await fetch(url, { headers: { Accept: 'application/json' } });
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            const { lat, lon, display_name } = data[0];
+            result = { lat: parseFloat(lat), lng: parseFloat(lon), label: display_name };
+          }
+        }
+      }
+
+      if (result) {
+        setCoords({ lat: result.lat, lng: result.lng });
+        setResolvedLabel(result.label);
+        loadNearbyPlaces(result.lat, result.lng);
       } else {
         setCoords(null);
         setResolvedLabel('');
+        setNearbyPlaces([]);
         setError(`No location found for "${q}". Try a more specific address or PIN code.`);
       }
     } catch {
@@ -82,7 +112,7 @@ export default function PollingBooth() {
     } finally {
       setLoading(false);
     }
-  }, [address]);
+  }, [address, loadNearbyPlaces]);
 
   const center = coords || DEFAULT_CENTER;
   const usingGoogleMaps = Boolean(GMAPS_KEY);
@@ -239,6 +269,42 @@ export default function PollingBooth() {
               </div>
             )}
           </div>
+
+          {nearbyPlaces.length > 0 && (
+            <section aria-labelledby="nearby-heading" className="glass-card" style={{ padding: '1.5rem', marginBottom: '1.5rem' }}>
+              <h3 id="nearby-heading" style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <School size={18} aria-hidden="true" style={{ color: 'var(--color-primary-light)' }} />
+                Likely polling locations nearby
+              </h3>
+              <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
+                Indian polling booths are usually hosted in these schools and government buildings (via Google Places). Confirm your assigned booth on{' '}
+                <a href="https://voters.eci.gov.in" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-primary-light)' }}>voters.eci.gov.in</a>.
+              </p>
+              <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', listStyle: 'none', padding: 0, margin: 0 }}>
+                {nearbyPlaces.map((p, i) => (
+                  <li key={`${p.name}-${i}`} style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 4,
+                    padding: '0.75rem 1rem',
+                    borderRadius: 'var(--radius)',
+                    background: 'var(--color-surface)',
+                    border: '1px solid var(--glass-border)',
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>{p.name}</span>
+                      {p.mapsUrl && (
+                        <a href={p.mapsUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.75rem', color: 'var(--color-primary-light)' }} aria-label={`Open ${p.name} in Google Maps`}>
+                          Open ↗
+                        </a>
+                      )}
+                    </div>
+                    {p.address && <div style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>{p.address}</div>}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           <div className="glass-card" style={{ padding: '1.5rem' }}>
             <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1rem' }}>
