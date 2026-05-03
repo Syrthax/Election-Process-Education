@@ -1,52 +1,85 @@
 import { useState } from 'react';
 import { MapPin, Navigation, Search, ExternalLink, AlertCircle } from 'lucide-react';
 
+const DEFAULT_CENTER = { lat: 20.5937, lng: 78.9629 }; // India
+
+function buildOsmEmbed(lat, lng) {
+  const delta = 0.04;
+  const left = lng - delta;
+  const right = lng + delta;
+  const top = lat + delta;
+  const bottom = lat - delta;
+  return `https://www.openstreetmap.org/export/embed.html?bbox=${left}%2C${bottom}%2C${right}%2C${top}&layer=mapnik&marker=${lat}%2C${lng}`;
+}
+
 export default function PollingBooth() {
   const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
-  const [useGeolocate, setUseGeolocate] = useState(false);
   const [coords, setCoords] = useState(null);
+  const [resolvedLabel, setResolvedLabel] = useState('');
+  const [error, setError] = useState('');
 
   const handleGeolocate = () => {
     if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser');
+      setError('Geolocation is not supported by your browser.');
       return;
     }
+    setError('');
     setLoading(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
         setCoords({ lat: latitude, lng: longitude });
         setAddress(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+        setResolvedLabel('Your current location');
         setSearched(true);
         setLoading(false);
       },
-      (error) => {
-        alert('Unable to get location. Please enter your address manually.');
+      () => {
+        setError('Unable to get your location. Please enter your address manually.');
         setLoading(false);
       }
     );
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
-    if (!address.trim()) return;
+    const q = address.trim();
+    if (!q) return;
+    setError('');
     setLoading(true);
     setSearched(true);
-    // Simulate search
-    setTimeout(() => setLoading(false), 800);
+    try {
+      const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=in&q=${encodeURIComponent(q)}`;
+      const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+      if (!res.ok) throw new Error('Geocoding failed');
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        const { lat, lon, display_name } = data[0];
+        setCoords({ lat: parseFloat(lat), lng: parseFloat(lon) });
+        setResolvedLabel(display_name);
+      } else {
+        setCoords(null);
+        setResolvedLabel('');
+        setError(`No location found for "${q}". Try a more specific address or PIN code.`);
+      }
+    } catch {
+      setCoords(null);
+      setError('Could not reach the geocoding service. Check your connection and try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const googleMapsSearchUrl = address
-    ? `https://www.google.com/maps/search/polling+booth+near+${encodeURIComponent(address)}`
-    : '';
-
-  const googleMapsEmbedUrl = coords
-    ? `https://www.google.com/maps?q=polling+booth&ll=${coords.lat},${coords.lng}&z=14&output=embed`
-    : address
-      ? `https://www.google.com/maps?q=polling+booth+near+${encodeURIComponent(address)}&output=embed`
-      : '';
+  const center = coords || DEFAULT_CENTER;
+  const mapEmbedUrl = buildOsmEmbed(center.lat, center.lng);
+  const googleMapsSearchUrl = coords
+    ? `https://www.google.com/maps/search/polling+booth/@${coords.lat},${coords.lng},14z`
+    : `https://www.google.com/maps/search/polling+booth+near+${encodeURIComponent(address || 'India')}`;
+  const directionsUrl = coords
+    ? `https://www.google.com/maps/dir/?api=1&destination=${coords.lat},${coords.lng}`
+    : `https://www.google.com/maps/dir/?api=1&destination=polling+booth+near+${encodeURIComponent(address)}`;
 
   return (
     <div className="animate-fade-in-up">
@@ -102,6 +135,28 @@ export default function PollingBooth() {
             Use My Location
           </button>
         </form>
+        {error && (
+          <div style={{
+            marginTop: '0.75rem',
+            padding: '0.6rem 0.85rem',
+            borderRadius: 'var(--radius)',
+            background: 'rgba(239, 68, 68, 0.1)',
+            border: '1px solid rgba(239, 68, 68, 0.3)',
+            color: 'var(--color-danger, #ef4444)',
+            fontSize: '0.85rem',
+          }}>
+            {error}
+          </div>
+        )}
+        {coords && resolvedLabel && (
+          <div style={{
+            marginTop: '0.75rem',
+            fontSize: '0.8rem',
+            color: 'var(--color-text-muted)',
+          }}>
+            📍 {resolvedLabel}
+          </div>
+        )}
       </div>
 
       {/* Info box */}
@@ -114,45 +169,40 @@ export default function PollingBooth() {
       }}>
         <AlertCircle size={20} style={{ color: 'var(--color-info)', flexShrink: 0, marginTop: 2 }} />
         <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-          <strong style={{ color: 'var(--color-text)' }}>Official Method:</strong> For the most accurate polling booth information, 
+          <strong style={{ color: 'var(--color-text)' }}>Official Method:</strong> For the most accurate polling booth information,
           search your name on{' '}
           <a href="https://voters.eci.gov.in" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-primary-light)' }}>
             voters.eci.gov.in
           </a>{' '}
-          using your EPIC number. Your exact polling station will be shown. The map below shows polling booths near your general area.
+          using your EPIC number. Your exact polling station will be shown. The map below shows your area — click "Open in Google Maps" to see polling stations nearby.
         </div>
       </div>
 
       {/* Map Area */}
-      {searched && (
+      {searched && coords && (
         <div className="animate-fade-in-up">
           <div className="glass-card" style={{
             overflow: 'hidden',
             marginBottom: '1.5rem',
           }}>
-            {/* Map embed */}
             <div style={{
               width: '100%',
               height: '400px',
               background: 'var(--color-surface-light)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
               position: 'relative',
             }}>
               <iframe
-                src={googleMapsEmbedUrl}
+                key={`${coords.lat}-${coords.lng}`}
+                src={mapEmbedUrl}
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
-                allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 title="Polling booth map"
               />
             </div>
 
-            {/* Actions */}
             <div style={{
               padding: '1.25rem',
               display: 'flex',
@@ -169,7 +219,7 @@ export default function PollingBooth() {
                 Open in Google Maps
               </a>
               <a
-                href={`https://www.google.com/maps/dir/?api=1&destination=polling+booth+near+${encodeURIComponent(address)}`}
+                href={directionsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-secondary"
@@ -177,10 +227,18 @@ export default function PollingBooth() {
                 <Navigation size={16} />
                 Get Directions
               </a>
+              <a
+                href={`https://www.openstreetmap.org/?mlat=${coords.lat}&mlon=${coords.lng}#map=15/${coords.lat}/${coords.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary"
+              >
+                <ExternalLink size={16} />
+                Open in OpenStreetMap
+              </a>
             </div>
           </div>
 
-          {/* Tips */}
           <div className="glass-card" style={{ padding: '1.5rem' }}>
             <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1rem' }}>📋 Polling Day Tips</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>

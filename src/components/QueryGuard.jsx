@@ -1,29 +1,65 @@
 import { useState } from 'react';
 import { Shield, X, MessageCircle, Send } from 'lucide-react';
-import { checkNeutrality } from '../utils/neutrality';
+import { checkNeutrality, sanitizeOutput } from '../utils/neutrality';
+import { askFeatherless, isFeatherlessConfigured } from '../utils/featherless';
 
 export default function QueryGuard() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const [response, setResponse] = useState(null);
   const [history, setHistory] = useState([]);
+  const [isThinking, setIsThinking] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!query.trim()) return;
+    const trimmed = query.trim();
+    if (!trimmed || isThinking) return;
 
-    const result = checkNeutrality(query);
-    const newEntry = {
-      id: Date.now(),
-      query: query.trim(),
-      isAdvisory: result.isAdvisory,
-      response: result.isAdvisory
-        ? result.response
-        : getInformationalResponse(query.trim()),
-    };
+    const guard = checkNeutrality(trimmed);
+    const id = Date.now();
 
-    setHistory(prev => [...prev, newEntry]);
+    if (guard.isAdvisory) {
+      setHistory(prev => [...prev, {
+        id,
+        query: trimmed,
+        isAdvisory: true,
+        response: guard.response,
+        source: 'guard',
+      }]);
+      setQuery('');
+      return;
+    }
+
     setQuery('');
+    setIsThinking(true);
+    setHistory(prev => [...prev, {
+      id,
+      query: trimmed,
+      isAdvisory: false,
+      response: '',
+      source: 'pending',
+    }]);
+
+    let answer;
+    let source = 'local';
+    try {
+      if (isFeatherlessConfigured()) {
+        const llmHistory = history.slice(-6).flatMap(h => ([
+          { role: 'user', content: h.query },
+          { role: 'assistant', content: h.response },
+        ]));
+        answer = sanitizeOutput(await askFeatherless(trimmed, llmHistory));
+        source = 'featherless';
+      } else {
+        answer = getInformationalResponse(trimmed);
+      }
+    } catch (err) {
+      answer = getInformationalResponse(trimmed) +
+        '\n\n(Note: live AI assistant is unavailable right now — showing a fallback answer.)';
+      source = 'local';
+    }
+
+    setHistory(prev => prev.map(h => h.id === id ? { ...h, response: answer, source } : h));
+    setIsThinking(false);
   };
 
   return (
@@ -107,6 +143,9 @@ export default function QueryGuard() {
               maxWidth: '90%',
             }}>
               👋 Hi! I can answer factual questions about the Indian election process. I cannot recommend candidates or express political opinions.
+              {isFeatherlessConfigured()
+                ? ' (Powered by Featherless AI)'
+                : ' (Running in offline keyword mode — set VITE_FEATHERLESS_API_KEY to enable the live AI assistant.)'}
             </div>
 
             {history.map(entry => (
@@ -149,7 +188,9 @@ export default function QueryGuard() {
                       NEUTRALITY GUARD ACTIVATED
                     </div>
                   )}
-                  {entry.response}
+                  {entry.response || (
+                    <span style={{ opacity: 0.7, fontStyle: 'italic' }}>Thinking…</span>
+                  )}
                 </div>
               </div>
             ))}
@@ -166,7 +207,8 @@ export default function QueryGuard() {
               type="text"
               value={query}
               onChange={e => setQuery(e.target.value)}
-              placeholder="Ask about elections..."
+              disabled={isThinking}
+              placeholder={isThinking ? 'Waiting for answer…' : 'Ask about elections...'}
               style={{
                 flex: 1,
                 padding: '10px 14px',
@@ -178,13 +220,14 @@ export default function QueryGuard() {
                 fontFamily: 'inherit',
               }}
             />
-            <button type="submit" style={{
+            <button type="submit" disabled={isThinking} style={{
               width: 40,
               height: 40,
               borderRadius: 8,
               background: 'var(--gradient-primary)',
               border: 'none',
-              cursor: 'pointer',
+              cursor: isThinking ? 'not-allowed' : 'pointer',
+              opacity: isThinking ? 0.6 : 1,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
