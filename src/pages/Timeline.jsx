@@ -1,7 +1,7 @@
-import { useApp } from '../context/AppContext';
+import { useApp } from '../context/useApp';
 import timelineData from '../data/timeline.json';
 import ChecklistItem from '../components/ChecklistItem';
-import { Calendar, CheckCircle2, Clock, AlertCircle, Flag } from 'lucide-react';
+import { Calendar, CheckCircle2, AlertCircle, Flag } from 'lucide-react';
 
 const typeConfig = {
   milestone: { icon: Flag, color: '#6366f1', label: 'Milestone' },

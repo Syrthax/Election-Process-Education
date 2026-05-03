@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { useApp } from '../context/AppContext';
-import ProgressTracker from '../components/ProgressTracker';
+import { useApp } from '../context/useApp';
 import votingData from '../data/votingSteps.json';
 import { UserCheck, UserPlus, Vote, ArrowRight, ArrowLeft, ChevronRight, ExternalLink } from 'lucide-react';
 

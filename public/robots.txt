@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://syrthax.github.io/Election-Process-Education/sitemap.xml

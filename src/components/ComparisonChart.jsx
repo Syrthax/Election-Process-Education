@@ -1,25 +1,13 @@
-import { useApp } from '../context/AppContext';
-
-/**
- * Pure CSS/SVG bar chart for candidate comparison
- * No external chart library needed
- */
+// Pure CSS/SVG bar chart for candidate comparison; no external chart lib needed.
 export default function ComparisonChart({ candidates }) {
   if (!candidates || candidates.length < 2) return null;
 
-  // Parse currency values to numbers for charting
   const parseAmount = (str) => {
     if (!str) return 0;
     const num = str.replace(/[₹,\s]/g, '');
     if (num.includes('Cr')) return parseFloat(num) * 10000000;
     if (num.includes('L')) return parseFloat(num) * 100000;
     return parseFloat(num) || 0;
-  };
-
-  const formatAmount = (num) => {
-    if (num >= 10000000) return `₹${(num / 10000000).toFixed(1)} Cr`;
-    if (num >= 100000) return `₹${(num / 100000).toFixed(0)} L`;
-    return `₹${num}`;
   };
 
   const colors = ['#6366f1', '#10b981', '#f59e0b'];

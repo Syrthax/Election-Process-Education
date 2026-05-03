@@ -1,7 +1,8 @@
-import { useApp } from '../context/AppContext';
+import { memo } from 'react';
+import { useApp } from '../context/useApp';
 import { User, Briefcase, GraduationCap, Scale, AlertTriangle, IndianRupee } from 'lucide-react';
 
-export default function CandidateCard({ candidate, showCompare = true }) {
+function CandidateCardComponent({ candidate, showCompare = true }) {
   const { state, dispatch } = useApp();
   const isComparing = state.compareList.includes(candidate.id);
 
@@ -76,6 +77,9 @@ export default function CandidateCard({ candidate, showCompare = true }) {
     </div>
   );
 }
+
+const CandidateCard = memo(CandidateCardComponent);
+export default CandidateCard;
 
 function InfoItem({ icon: Icon, label, value, highlight = false }) {
   return (

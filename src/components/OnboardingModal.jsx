@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Vote, ListChecks, Users, MapPin, Shield, ArrowRight, X, Sparkles } from 'lucide-react';
+import { Vote, ListChecks, Users, Shield, ArrowRight, X, Sparkles } from 'lucide-react';
 
 const slides = [
   {

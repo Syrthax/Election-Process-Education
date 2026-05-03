@@ -1,5 +1,5 @@
 import { X } from 'lucide-react';
-import { useApp } from '../context/AppContext';
+import { useApp } from '../context/useApp';
 import ComparisonChart from './ComparisonChart';
 
 export default function CandidateCompare({ candidates }) {

@@ -1,4 +1,4 @@
-import { useI18n } from '../i18n/I18nContext';
+import { useI18n } from '../i18n/useI18n';
 import { Globe } from 'lucide-react';
 
 export default function LanguageToggle() {

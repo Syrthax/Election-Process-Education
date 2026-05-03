@@ -52,7 +52,7 @@ export default function QueryGuard() {
       } else {
         answer = getInformationalResponse(trimmed);
       }
-    } catch (err) {
+    } catch {
       answer = getInformationalResponse(trimmed) +
         '\n\n(Note: live AI assistant is unavailable right now — showing a fallback answer.)';
       source = 'local';
@@ -92,7 +92,7 @@ export default function QueryGuard() {
 
       {/* Chat panel */}
       {isOpen && (
-        <div className="animate-fade-in-up" style={{
+        <div role="dialog" aria-modal="false" aria-labelledby="qg-title" className="animate-fade-in-up" style={{
           position: 'fixed',
           bottom: 96,
           right: 24,
@@ -116,15 +116,15 @@ export default function QueryGuard() {
             alignItems: 'center',
             gap: 10,
           }}>
-            <Shield size={20} color="white" />
+            <Shield size={20} color="white" aria-hidden="true" />
             <div>
-              <div style={{ fontWeight: 700, color: 'white', fontSize: '0.95rem' }}>Ask VoteWise</div>
+              <div id="qg-title" style={{ fontWeight: 700, color: 'white', fontSize: '0.95rem' }}>Ask VoteWise</div>
               <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.8)' }}>Neutral, fact-based answers only</div>
             </div>
           </div>
 
           {/* Messages */}
-          <div style={{
+          <div role="log" aria-live="polite" aria-label="Conversation with VoteWise" style={{
             flex: 1,
             overflowY: 'auto',
             padding: '1rem',
@@ -203,11 +203,16 @@ export default function QueryGuard() {
             display: 'flex',
             gap: 8,
           }}>
+            <label htmlFor="qg-input" className="visually-hidden">Type your question about Indian elections</label>
             <input
+              id="qg-input"
               type="text"
               value={query}
               onChange={e => setQuery(e.target.value)}
               disabled={isThinking}
+              maxLength={500}
+              autoComplete="off"
+              aria-busy={isThinking}
               placeholder={isThinking ? 'Waiting for answer…' : 'Ask about elections...'}
               style={{
                 flex: 1,
@@ -220,7 +225,7 @@ export default function QueryGuard() {
                 fontFamily: 'inherit',
               }}
             />
-            <button type="submit" disabled={isThinking} style={{
+            <button type="submit" disabled={isThinking} aria-label="Send question" style={{
               width: 40,
               height: 40,
               borderRadius: 8,
@@ -233,7 +238,7 @@ export default function QueryGuard() {
               justifyContent: 'center',
               flexShrink: 0,
             }}>
-              <Send size={16} color="white" />
+              <Send size={16} color="white" aria-hidden="true" />
             </button>
           </form>
         </div>

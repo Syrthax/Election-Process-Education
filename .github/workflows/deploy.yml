@@ -30,14 +30,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Run unit tests
+        run: npm test -- --run
+
       - name: Build
         env:
-          # Featherless key is injected at build time so the static bundle
-          # can call the API directly. NOTE: this means the key is visible
-          # to anyone who downloads the JS bundle. For a long-lived public
-          # site, move the call behind a serverless proxy.
+          # Build-time env vars become public — they're inlined into the
+          # client bundle. For a long-lived public site, move the
+          # Featherless/Maps calls behind a serverless proxy.
           VITE_FEATHERLESS_API_KEY: ${{ secrets.FEATHERLESS_API }}
           VITE_FEATHERLESS_MODEL: ${{ vars.FEATHERLESS_MODEL || 'google/gemma-2-9b-it' }}
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+          VITE_GA_MEASUREMENT_ID: ${{ vars.GA_MEASUREMENT_ID }}
         run: npm run build
 
       - name: Add SPA fallback (copy index.html to 404.html)

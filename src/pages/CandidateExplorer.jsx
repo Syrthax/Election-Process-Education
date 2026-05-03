@@ -1,15 +1,17 @@
 import { useState, useMemo } from 'react';
-import { useApp } from '../context/AppContext';
+import { useApp } from '../context/useApp';
 import candidateData from '../data/candidates.json';
 import CandidateCard from '../components/CandidateCard';
 import CandidateCompare from '../components/CandidateCompare';
+import { useDebouncedValue } from '../components/useDebouncedValue';
 import { Search, Filter } from 'lucide-react';
 
 export default function CandidateExplorer() {
-  const { state, dispatch } = useApp();
+  const { state } = useApp();
   const [selectedState, setSelectedState] = useState('');
   const [selectedConstituency, setSelectedConstituency] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const debouncedSearch = useDebouncedValue(searchQuery, 200);
 
   const states = useMemo(() =>
     [...new Set(candidateData.constituencies.map(c => c.state))],
@@ -41,14 +43,14 @@ export default function CandidateExplorer() {
   }, [filteredConstituency, selectedState]);
 
   const displayCandidates = useMemo(() => {
-    if (!searchQuery) return allCandidates;
-    const q = searchQuery.toLowerCase();
+    if (!debouncedSearch) return allCandidates;
+    const q = debouncedSearch.toLowerCase();
     return allCandidates.filter(c =>
       c.name.toLowerCase().includes(q) ||
       c.party.toLowerCase().includes(q) ||
       c.partyAbbr.toLowerCase().includes(q)
     );
-  }, [allCandidates, searchQuery]);
+  }, [allCandidates, debouncedSearch]);
 
   return (
     <div className="animate-fade-in-up">

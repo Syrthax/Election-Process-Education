@@ -1,4 +1,4 @@
-import { Check, Square } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 export default function ChecklistItem({ item, checked, onToggle }) {
   const priorityColors = {

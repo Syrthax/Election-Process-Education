@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ListChecks, Users, Calendar, MapPin, HelpCircle, ArrowRight, Vote, Shield, BarChart3, Sparkles, CheckCircle } from 'lucide-react';
-import { AnimatedCounter } from '../components/ScrollEffects';
+import AnimatedCounter from '../components/AnimatedCounter';
 
 const features = [
   {
